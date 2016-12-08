@@ -23,7 +23,7 @@ public class Sport {
         return checked;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setChecked(boolean b) {
+        this.checked = b;
     }
 }

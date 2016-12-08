@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Sports</string>
+    <string name="search">Caracter</string>
+    <string name="findItems">Filtrar por caracter</string>
+    <string name="title_ad">Filtrar por caracter</string>
+    <string name="admens">Selecciona un caracter para filtrar</string>
+    <string name="saveData">Datos guardados</string>
 </resources>
