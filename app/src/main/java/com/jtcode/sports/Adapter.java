@@ -35,12 +35,13 @@ public class Adapter extends ArrayAdapter<Sport>{
         sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
         readPrefs();
     }
+
     private void readPrefs(){
         Map<String,?> favSport = sharedPreferences.getAll();
 
-        for (int i=0;i< localCopy.size();i++) {
-            if(favSport.containsKey(localCopy.get(i).getName())){
-                localCopy.get(i).setChecked(true);
+        for (int i=0;i< getCount();i++) {
+            if(favSport.containsKey(getItem(i).getName())){
+                getItem(i).setChecked(true);
             }
         }
     }
@@ -97,6 +98,7 @@ public class Adapter extends ArrayAdapter<Sport>{
     public void reloadAllSports(){
         clear();
         addAll(Repository.getInstance());
+        readPrefs();
         notifyDataSetChanged();
     }
 

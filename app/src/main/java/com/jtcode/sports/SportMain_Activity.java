@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SportMain_Activity extends AppCompatActivity {
@@ -24,18 +25,30 @@ public class SportMain_Activity extends AppCompatActivity {
     ListView lvSport;
     FloatingActionButton fabAcept;
     SharedPreferences sharedPreferences;
+    boolean filtredflag;
+    char charFilt;
+    final String FILT="filt";
+    final String CHARFILT="char";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_main_);
         sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
-        init();
+        if(savedInstanceState!=null) {
+            charFilt=savedInstanceState.getChar(CHARFILT);
+            filtredflag=savedInstanceState.getBoolean(FILT);
+            init(filtredflag);
+
+        }
+        else{
+            init(false);
+        }
     }
 
-    private void init(){
+    private void init(boolean create) {
+        adapter = new Adapter(this);
 
-        adapter= new Adapter(this);
         lvSport=(ListView)findViewById(R.id.listSports);
 
         fabAcept=(FloatingActionButton)findViewById(R.id.fabOK);
@@ -50,11 +63,17 @@ public class SportMain_Activity extends AppCompatActivity {
                 Toast.makeText(SportMain_Activity.this,getString(R.string.saveData),Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (create){
+           applyFilter();
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(FILT,filtredflag);
+        outState.putChar(CHARFILT,charFilt);
     }
 
     @Override
@@ -83,11 +102,13 @@ public class SportMain_Activity extends AppCompatActivity {
             alertD.setPositiveButton(getString(R.string.title_ad), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                   if(editTextAD.getText().toString().trim().length()!=0) {
-                       adapter.applyCharFilter(editTextAD.getText().toString().charAt(0));
-                   }else{
-                       adapter.reloadAllSports();
-                   }
+                    if(editTextAD.getText().toString().trim().length()!=0) {
+                        charFilt = editTextAD.getText().toString().charAt(0);
+                    }
+                    else{
+                        charFilt=' ';
+                    }
+                    applyFilter();
                 }
             }).create();
             ViewGroup parent=(ViewGroup)v;
@@ -95,6 +116,17 @@ public class SportMain_Activity extends AppCompatActivity {
             alertD.show();
         }
         return true;
+    }
+
+    private void applyFilter(){
+
+        if (String.valueOf(charFilt).trim().length() != 0) {
+            adapter.applyCharFilter(charFilt);
+            filtredflag=true;
+        } else {
+            filtredflag=false;
+            adapter.reloadAllSports();
+        }
     }
 
     private void savePrefs(){
