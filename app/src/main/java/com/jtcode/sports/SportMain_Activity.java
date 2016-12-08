@@ -34,6 +34,7 @@ public class SportMain_Activity extends AppCompatActivity {
     }
 
     private void init(){
+
         adapter= new Adapter(this);
         lvSport=(ListView)findViewById(R.id.listSports);
 
@@ -49,6 +50,11 @@ public class SportMain_Activity extends AppCompatActivity {
                 Toast.makeText(SportMain_Activity.this,getString(R.string.saveData),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override

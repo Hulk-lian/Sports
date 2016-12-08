@@ -32,5 +32,14 @@ public class DAOSport {
     public static List<Sport> getAll(){
         return listaDep;
     }
-    
+
+    public static ArrayList<Sport> getSportsByChar(char c){
+        ArrayList<Sport> artemp=new ArrayList();
+        for ( Sport s: listaDep ) {
+            if(s.getName().toLowerCase().startsWith(String.valueOf(c).toLowerCase())){
+                artemp.add(s);
+            }
+        }
+        return artemp;
+    }
 }

@@ -24,13 +24,14 @@ public class Adapter extends ArrayAdapter<Sport>{
     SharedPreferences sharedPreferences;
 
     public Adapter(Context context) {
-        super(context,R.layout.item_sport,new ArrayList<Sport>(Repository.getInstance()));
-        //super(context,R.layout.item_sport);
+       // super(context,R.layout.item_sport,new ArrayList<Sport>(Repository.getInstance()));
+        super(context,R.layout.item_sport);
         this.context=context;
-        this.localCopy=new ArrayList<>(Repository.getInstance());
-       /* this.addAll(DAOSport.getAll());
+       //this.localCopy=new ArrayList<>(Repository.getInstance());
+        this.addAll(DAOSport.getAll());
         localCopy=new ArrayList<>();
-        localCopy.addAll(DAOSport.getAll());*/
+        localCopy.addAll(DAOSport.getAll());
+
         sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
         readPrefs();
     }
@@ -65,17 +66,17 @@ public class Adapter extends ArrayAdapter<Sport>{
         else{
             sportHolder=(SportHolder)item.getTag();
         }
-            sportHolder.txvName.setText(localCopy.get(position).getName());
-            sportHolder.imgSport.setImageResource(localCopy.get(position).getImg());
+            sportHolder.txvName.setText(getItem(position).getName());
+            sportHolder.imgSport.setImageResource(getItem(position).getImg());
 
         sportHolder.chbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-               localCopy.get(position).setChecked(b);
+               getItem(position).setChecked(b);
             }
         });
 
-        sportHolder.chbSelected.setChecked(localCopy.get(position).isChecked());
+        sportHolder.chbSelected.setChecked(getItem(position).isChecked());
 
         return item;
     }
@@ -84,8 +85,8 @@ public class Adapter extends ArrayAdapter<Sport>{
      * @param character the first character in the name
      * */
     public void applyCharFilter(char character){
-        localCopy.clear();
-        localCopy.addAll(Repository.getSportsByChar(character));
+        clear();
+        addAll(DAOSport.getSportsByChar(character));
         notifyDataSetChanged();
     }
 
@@ -94,8 +95,8 @@ public class Adapter extends ArrayAdapter<Sport>{
      * First clean all the sport and after charge all the sports
      * */
     public void reloadAllSports(){
-        localCopy.clear();
-        localCopy.addAll(Repository.getInstance());
+        clear();
+        addAll(Repository.getInstance());
         notifyDataSetChanged();
     }
 
